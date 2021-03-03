@@ -166,18 +166,6 @@ $(".card .list-group").sortable({
   scroll: false,
   tolerance: "pointer",
   helper: "clone",
-  activate: function(event) {
-    console.log("activate", this);
-  },
-  deactivate: function(event) {
-    console.log("deactivate", this);
-  },
-  over: function(event) {
-    console.log("over", this);
-  },
-  out: function(event) {
-    console.log("out", this);
-  },
   update: function(event) {
 var tempArr = [];
 
@@ -205,7 +193,21 @@ var tempArr = [];
 
       tasks[arrName] = tempArr;
       saveTasks();
-   console.log(tempArr);
+  }
+});
+
+$('#trash').droppable({
+  accept: ".card, .list-group-item",
+  tolerance: "touch",
+  drop: function(event, ui) {
+    console.log("drop");
+    ui.draggable.remove();
+  },
+  over: function(event, ui) {
+    console.log("over");
+  },
+  out: function(event, ui) {
+    console.log("out");
   }
 });
 
