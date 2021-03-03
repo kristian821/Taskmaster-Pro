@@ -161,6 +161,54 @@ $("#task-form-modal .btn-primary").click(function() {
   }
 });
 
+$(".card .list-group").sortable({
+  connectWith: $(".card .list-group"),
+  scroll: false,
+  tolerance: "pointer",
+  helper: "clone",
+  activate: function(event) {
+    console.log("activate", this);
+  },
+  deactivate: function(event) {
+    console.log("deactivate", this);
+  },
+  over: function(event) {
+    console.log("over", this);
+  },
+  out: function(event) {
+    console.log("out", this);
+  },
+  update: function(event) {
+var tempArr = [];
+
+// loop over the current set of children in sortable list
+    $(this).children().each(function() {
+      var text = $(this)
+        .find("p")
+        .text()
+        .trim();
+
+      var date = $(this)
+        .find("span")
+        .text()
+        .trim();
+
+      tempArr.push({
+        text: text,
+        date: date
+      });
+    });
+
+    var arrName = $(this)
+      .attr("id")
+      .replace("list-", "");
+
+      tasks[arrName] = tempArr;
+      saveTasks();
+   console.log(tempArr);
+  }
+});
+
 // remove all tasks
 $("#remove-tasks").on("click", function() {
   for (var key in tasks) {
