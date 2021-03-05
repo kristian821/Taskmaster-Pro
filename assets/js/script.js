@@ -153,6 +153,12 @@ $(".list-group").on("change", "input[type='text']", function() {
   // replace input with span element
   $(this).replaceWith(taskSpan);
 
+  setInterval(function() {
+    $(".card .list-group-item").each(function(index, el) {
+      auditTask(el);
+    });
+  }, (1000 * 60) * 30);
+
   // Pass this element into auditTask() to check new due date
   auditTask($(taskSpan).closest(".list-group-item"));
 });
@@ -171,7 +177,7 @@ $("#task-form-modal").on("shown.bs.modal", function() {
 });
 
 // save button in modal was clicked
-$("#task-form-modal .btn-primary").click(function() {
+$("#task-form-modal .btn-save").click(function() {
   // get form values
   var taskText = $("#modalTaskDescription").val();
   var taskDate = $("#modalDueDate").val();
@@ -193,7 +199,16 @@ $("#task-form-modal .btn-primary").click(function() {
 });
 
 $(".card .list-group").sortable({
+  activate: ($(this).addClass("dropover"),
+  $(".bottom-trash").addClass("bottom-trash-drag")),
   connectWith: $(".card .list-group"),
+  deactivate: ($(this).removeClass("dropover"), $(".bottom-trash").removeClass("bottom-trash-drag")),
+  over: function(event, ui) {
+      $(event.target).addClass("dropover-active");
+  },
+  out: function(event, ui) {
+    $(event.target).removeClass("dropover-active");
+  },
   scroll: false,
   tolerance: "pointer",
   helper: "clone",
@@ -235,10 +250,10 @@ $('#trash').droppable({
     ui.draggable.remove();
   },
   over: function(event, ui) {
-    
+    $(".bottom-trash").addClass("bottom-trash-active");
   },
   out: function(event, ui) {
-    
+    $(".bottom-trash").removeClass("bottom-trash-active");
   }
 });
 
